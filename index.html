@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body{padding-top:10px;}
+    .all_bg{
+        width:800px;height:600px;margin:0px auto;
+    }
+    #allcanvas{
+        position: relative;
+        width:800px;height:600px;
+        margin: 0px;
+    }
+    #canvas1{position: absolute;width:800px;height:600px;z-index: 1;bottom:0;left:0;border:1px solid #f00;}
+    #canvas2{position: absolute;width:800px;height:600px;z-index: 0;bottom:0;left:0;}
+
+  </style>
+</head>
+<body>
+  <div class="all_bg">
+      <div id="allcanvas">
+          <canvas id="canvas1" width="800" height="600">
+              <!--大鱼、小鱼/吃食物特效-->
+          </canvas>
+          <canvas id="canvas2" width="800" height="600">
+              <!--海葵特效-->
+          </canvas>
+      </div>
+  </div>
+  <script src="js/commonFunctions.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/background.js"></script>
+  <script src="js/ane.js"></script>
+  <script src="js/fruit.js"></script>
+</body>
+</html>

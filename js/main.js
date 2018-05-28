@@ -20,10 +20,15 @@
     var ane;
     //2.6:创建一个变量保存食物对象
     var fruit;
+    //2.7:创建两个变量保存上一帧执行时间和第二帧的时间差
+    var lastTime;
+    var deltaTime;
     //3:创建函数game-->启动函数
     function game(){
         init();
         gameloop();
+        lastTime=Date.now();//上一帧时间
+        deltaTime=0;
     }
 
     //4:创建函数init,初始化函数，初始化变量和对象值
@@ -50,8 +55,17 @@
     function gameloop(){
         //5.1:创建一个智能定时器调用gameloop
         requestAnimFrame(gameloop);//js/commonFunction.js
+        //5.11:两帧之间的时间差；
+        var now=Date.now();
+        deltaTime=now-lastTime;
+        lastTime=now;
+        if(deltaTime>40){
+            deltaTime=40;
+        }
         //5.2:绘制背景图片
         drawBackground();//js/background.js
+        //5.3:监听画布上食物的数量
+        fruitMonitor();
         //5.8:绘制海葵
         ane.draw();//js/ane.js
         //5.9:绘制食物

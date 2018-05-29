@@ -33,6 +33,8 @@ momObj.prototype.init=function(){
 //3.为大鱼添加绘制方法
 momObj.prototype.draw=function(){
     // 1:保存画笔状态
+    this.x=mx;
+    this.y=my;
     ctx1.save();
     //2:平移原点
     ctx1.translate(this.x,this.y);

@@ -25,6 +25,9 @@
     var deltaTime;
     //2.8:创建一个变量保存大鱼对象
     var mom;
+    //2.9:创建两个变量，保存鼠标的位置
+    var mx=0;
+    var my=0;
     //3:创建函数game-->启动函数
     function game(){
         init();
@@ -55,6 +58,8 @@
         //4.7:创建大鱼对象并且调用初始化方法
         mom=new momObj();//js/mom.js
         mom.init();
+        //4.8:为画布1绑定onmousemove事件
+        can1.addEventListener("mousemove",onMouseMove,false);
     }
     //5:创建函数gameloop,通过智能定时器调用绘制游戏中不同角色功能
     function gameloop(){
@@ -83,3 +88,13 @@
     }
     //6：页面加载成功后调用game函数
     document.body.onload=game;
+    //7:获取鼠标位置（画布）
+    function onMouseMove(e){
+        if(e.offsetX||e.layerX){
+            mx=e.offsetX==undefined?e.layerX:e.offsetX;
+        }
+        if(e.offsetY||e.layerY){
+            my=e.offsetY==undefined?e.layerY:e.offsetY;
+        }
+        //console.log(mx,my);
+    }

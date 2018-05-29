@@ -23,6 +23,8 @@
     //2.7:创建两个变量保存上一帧执行时间和第二帧的时间差
     var lastTime;
     var deltaTime;
+    //2.8:创建一个变量保存大鱼对象
+    var mom;
     //3:创建函数game-->启动函数
     function game(){
         init();
@@ -50,6 +52,9 @@
         //4.6:创建食物对象并且调用初始化方法
         fruit=new fruitObj();//js/fruit.js
         fruit.init();//js/fruit.js
+        //4.7:创建大鱼对象并且调用初始化方法
+        mom=new momObj();//js/mom.js
+        mom.init();
     }
     //5:创建函数gameloop,通过智能定时器调用绘制游戏中不同角色功能
     function gameloop(){
@@ -63,13 +68,18 @@
             deltaTime=40;
         }
         //5.2:绘制背景图片
+        ctx2.clearRect(0,0,canWidth,canHeight);
         drawBackground();//js/background.js
         //5.3:监听画布上食物的数量
         fruitMonitor();
+        //5.4:清空画布上的所有元素
+        ctx1.clearRect(0,0,canWidth,canHeight);
         //5.8:绘制海葵
         ane.draw();//js/ane.js
         //5.9:绘制食物
         fruit.draw();//js/fruit.js
+        //5.10:绘制大鱼
+        mom.draw();//js/mom.js
     }
     //6：页面加载成功后调用game函数
     document.body.onload=game;

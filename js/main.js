@@ -32,8 +32,6 @@
     function game(){
         init();
         gameloop();
-        lastTime=Date.now();//上一帧时间
-        deltaTime=0;
     }
 
     //4:创建函数init,初始化函数，初始化变量和对象值
@@ -46,6 +44,10 @@
         ctx2=can2.getContext("2d");
         //4.3 加载图片
         bgPic.src="src/background.jpg";
+
+        lastTime=Date.now();//上一帧时间
+        deltaTime=0;
+
         //4.4：初始化画布宽度和高度
         canWidth=can1.width;
         canHeight=can1.height;
@@ -65,6 +67,7 @@
     function gameloop(){
         //5.1:创建一个智能定时器调用gameloop
         requestAnimFrame(gameloop);//js/commonFunction.js
+
         //5.11:两帧之间的时间差；
         var now=Date.now();
         deltaTime=now-lastTime;
@@ -72,6 +75,7 @@
         if(deltaTime>40){
             deltaTime=40;
         }
+
         //5.2:绘制背景图片
         ctx2.clearRect(0,0,canWidth,canHeight);
         drawBackground();//js/background.js

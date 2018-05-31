@@ -28,6 +28,7 @@
     //2.9:创建两个变量，保存鼠标的位置
     var mx=0;
     var my=0;
+    var baby;
     //3:创建函数game-->启动函数
     function game(){
         init();
@@ -62,6 +63,8 @@
         mom.init();
         //4.8:为画布1绑定onmousemove事件
         can1.addEventListener("mousemove",onMouseMove,false);
+        baby=new babyObj();
+        baby.init();
     }
     //5:创建函数gameloop,通过智能定时器调用绘制游戏中不同角色功能
     function gameloop(){
@@ -89,6 +92,10 @@
         fruit.draw();//js/fruit.js
         //5.10:绘制大鱼
         mom.draw();//js/mom.js
+        //碰撞检测
+        momFruitsCollsion();
+        baby.draw();
+        momBabyCollsion();
     }
     //6：页面加载成功后调用game函数
     document.body.onload=game;

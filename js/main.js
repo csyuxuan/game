@@ -29,6 +29,8 @@
     var mx=0;
     var my=0;
     var baby;
+    var wave;
+    var data;
     //3:创建函数game-->启动函数
     function game(){
         init();
@@ -65,6 +67,10 @@
         can1.addEventListener("mousemove",onMouseMove,false);
         baby=new babyObj();
         baby.init();
+        wave=new waveObj();
+        wave.init();
+        data=new dataObj();
+        data.init();
     }
     //5:创建函数gameloop,通过智能定时器调用绘制游戏中不同角色功能
     function gameloop(){
@@ -96,6 +102,9 @@
         momFruitsCollsion();
         baby.draw();
         momBabyCollsion();
+        wave.draw();
+        data.draw();
+
     }
     //6：页面加载成功后调用game函数
     document.body.onload=game;

@@ -14,6 +14,11 @@ function momFruitsCollsion(){
             if(l<900){
                 //1.5:食物消失
                 fruit.alive[i] = false;
+                wave.born(fruit.x[i],fruit.y[i]);
+                if(fruit.fruitType[i]=="orange"){
+                    data.double=2;
+                }
+                data.addScore();
             }
         }
     }

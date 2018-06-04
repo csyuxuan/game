@@ -1,106 +1,104 @@
-/**
- * Created by web-01 on 2018/5/24.
- */
-//fruit.js 保存所有食物
-//1：食物有两种颜色：蓝色、橙色
-//2：食物：30个 15个可见 15不可见
-//3：食物生长：由小到大、向上漂浮
-//4：食物漂浮出画布，变为不可见/食物被大鱼吃掉，变为不可见
-
-// 1：创建食物类
-var fruitObj=function(){
-    this.alive=[];//是否可见
-    this.orange=new Image();
-    this.blue=new Image();
-    this.x=[];
-    this.y=[];
-    this.l=[];//食物长度
-    this.spd=[];//食物速度
-    this.fruitType=[];//食物类型
-    this.aneNo=[];//所在海葵的坐标
+//果实类
+var fruitObj = function(){
+    this.alive = [];//是否活着BOOL
+    this.orange = new Image();//桔色图片
+    this.blue = new Image();//蓝色图片
+    this.x = [];//果实的位置
+    this.y = [];//果实的位置
+    this.l = [];//图片的长度（由小变大）
+    this.spd = [];//每个果实向上速度
+    this.fruitType = [];
+    this.aneNO = [];//第几个海葵
 }
-// 2：创建食物数量
-fruitObj.prototype.num=30;
-// 3：创建食物初始化方法
-fruitObj.prototype.init=function(){
+fruitObj.prototype.num = 30;
+fruitObj.prototype.init = function(){
     for(var i=0;i<this.num;i++){
-        this.alive[i]=false;
-        this.x[i]=0;
-        this.y[i]=0;
-        this.l[i]=0;
-        this.spd[i]=Math.random()*0.17+0.003;
+        this.alive[i]=false;//初始每个海葵活动的 ..
+        this.x[i] = 0;
+        this.y[i] = 0;
+        this.aneNO[i] = 0;
+        //速度..变大的速度，向上的速度。
+        this.spd[i] = Math.random()*0.017+0.003;  //[0.005-0.015)
+        this.fruitType[i]="";
     }
-    //console.log(this.alive,this.x,this.y,this.l,this.spd,this.fruitType);
-    this.orange.src="src/fruit.png";
-    this.blue.src="src/blue.png";
-}
-// 4：创建食物绘制方法
-fruitObj.prototype.draw=function(){
-    for(var i=0;i<this.num;i++) {
-        if (this.alive[i]) {
-            if(this.l[i]<14){
-                //由小变大
-                this.l[i]+=this.spd[i]*deltaTime/2;
-            }else{
-                //向上漂浮
-                this.y[i]-=this.spd[i]*deltaTime;
-            }
-            if (this.fruitType[i] == "blue") {
-                var pic = this.blue;
-            } else {
-                var pic = this.orange;
-            }
-            ctx2.drawImage(pic,
-                this.x[i]-this.l[i]*0.5,
-                this.y[i]-this.l[i]*0.5,
-                this.l[i],
-                this.l[i]);
+    this.orange.src = "./src/fruit.png";
+    this.blue.src = "./src/blue.png";
+};
 
-            //如果漂浮出画布
+//保持屏幕上果实数量，最少15个
+fruitObj.prototype.draw = function(){
+    for(var i=0;i<this.num;i++){
+        //find an ane,grow,fly up
+        if(this.alive[i]){//如果是活动状态才显示
+
+            //出生时指定类型 blue orange
+            if(this.fruitType[i]=="blue"){
+                var pic = this.orange;
+            }else{
+                var pic = this.blue;
+            }
+            //先由小变大最大14个像素
+            if(this.l[i]<=14){
+                var NO = this.aneNO[i];
+                this.x[i] = ane.headx[NO];
+                this.y[i] = ane.heady[NO];
+                this.l[i] += this.spd[i]*deltaTime;
+                //console.log(this.x[i]+"_"+this.y[i]+"_"+this.l[i]);
+                ctx2.drawImage(pic,
+                    this.x[i]-this.l[i]*0.5,  //出生画在中间
+                    this.y[i]-this.l[i]*0.5,
+                    this.l[i],
+                    this.l[i]);
+            }else{
+                //变大后向上漂
+                this.y[i]-=this.spd[i]*3*deltaTime;//向上
+
+                ctx2.drawImage(pic,
+                    this.x[i]-this.l[i]*0.5,  //出生画在中间
+                    this.y[i]-this.l[i]*0.5,
+                    this.l[i],
+                    this.l[i]);
+            }
+
+
+            //浮出屏幕
             if(this.y[i]<10){
-               this.alive[i]=false;
+                this.alive[i]=false;
             }
         }
     }
-}
-// 5：挂载到index.html中，并且main.js创建对象调用相应方法
+};
 
-//监听画布中活动状态的果实数量，如果不足15个，就创建一个活动食物
+//果实出生的方法
+fruitObj.prototype.born = function(i){
+    this.aneNO[i] = Math.floor(Math.random()*ane.num);
+    this.l[i] = 0;//初始化时大小均为0
+    this.alive[i]=true;
+    this.fruitType[i] = Math.random()<0.9?"orange":"blue";
+};
+
+//监听如果活的果实不足15个就创建一个活的食物
 function fruitMonitor(){
-   var num=0;
-   for(var i=0;i<fruit.num;i++){
-       if(fruit.alive[i]){
-           num++;
-       }
-   }
-   if(num<15){
-       sendFruit();
-       return;
-   }
+    var num = 0;
+    for(var i=0;i<fruit.num;i++){
+        if(fruit.alive[i])num++;
+    }
+    if(num<15){//如果食物小于15个就
+        //send fruit
+        sendFruit();
+        return;
+    }
 }
-//从状态为不活动食物中挑一个出生
+
 function sendFruit(){
     for(var i=0;i<fruit.num;i++){
         if(!fruit.alive[i]){
-            fruit.born(i);
+            fruit.born(i);//!!!!!!!在这里出生一个食物
             return;
         }
     }
 }
-//食物出生
-fruitObj.prototype.born=function(i){
-    // 随机获取海葵下标
-    var aneID=Math.floor(Math.random()*ane.num);
-    // 获取海葵x坐标给食物
-    this.x[i]=ane.x[aneID];
-    // 获取海葵高度计算食物坐标y
-    this.y[i]=canHeight-ane.len[i];
-    // 修改状态为true
-    this.alive[i]=true;
-    this.fruitType[i]=Math.random()<0.9?"blue":"orange";
 
-}
-//食物状态改变为不活动
-fruitObj.prototype.dead=function(){
-
+fruitObj.prototype.dead = function(i){
+    this.alive[i]=false;
 }
